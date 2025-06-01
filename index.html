@@ -16,5 +16,32 @@
     <input type="text" id="name" placeholder="Name">
     <input type="number" id="price" placeholder="Price">
     <button onclick="addProduct()">Add</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function loadProducts() {
+            $.get("http://localhost:5000/api/product", function (data) {
+                $("#products").empty();
+                data.forEach(p => { $("#products").append(`<div class="product">${p.name} - $${p.price}</div>`); });
+            });
+        }
+
+        function addProduct() {
+            let product = {
+                name: $("#name").val(),
+                price: parseFloat($("#price").val())
+            };
+
+            $.ajax({
+                url: "http://loacalhost:5000/api/product",
+                type: "POST",
+                currentType: "application/json",
+                data: JSON.stringify(product),
+                success: function () { loadProducts(); }
+            });
+        }
+
+        loadProducts();
+    </script>
 </body>
 </html>
